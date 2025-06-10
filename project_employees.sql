@@ -1,5 +1,5 @@
 select distinct project_id,
-avg(e.experience_years) as average_years
+round(avg(e.experience_years)::numeric,2) as average_years
 from project p
 inner join employee e
 on p.employee_id=e.employee_id
