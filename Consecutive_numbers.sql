@@ -23,3 +23,12 @@ from (
   from logs
 ) t
 where num = prev1 and num = prev2;
+
+-- another solution
+select a.num as ConsecutiveNums
+from logs a
+inner join logs b
+on a.id+1=b.id and a.num=b.num
+inner join logs c
+on b.id+1=c.id and b.num=c.num
+
