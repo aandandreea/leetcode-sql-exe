@@ -44,3 +44,20 @@ select p.product_name,cte.unit
 from products p
 inner join cte
 on p.product_id=cte.product_id
+
+--- or
+with Feb as (
+    select product_id,unit
+    from orders
+    where order_date between '2020-02-01' and '2020-02-29'
+),
+FebOrder as (
+    select product_id,sum(unit) as unit
+    from Feb
+    group by product_id
+    having sum(unit)>=100
+)
+select product_name,FebOrder.unit
+from FebOrder
+inner join products p
+on p.product_id=FebOrder.product_id
