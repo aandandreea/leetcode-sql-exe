@@ -27,3 +27,13 @@ with immediateCost as (
     having min(order_date)=min(customer_pref_delivery_date)
     order by customer_id )
  select round((select count(customer_id) from immediateCost)*100.00/(select count(distinct customer_id)from delivery),2) as immediate_percentage
+
+--or 
+
+ select round(100.00*avg(case when order_date=customer_pref_delivery_date then 1 else 0 end),2) as immediate_percentage
+ from delivery
+ where (order_date,customer_id) in (
+    select min(order_date),customer_id
+    from delivery
+    group by customer_id
+ );
