@@ -50,11 +50,13 @@ item_id is the primary key (column with unique values) of this table.
 Write a solution to find for each user, the join date and the number of orders they made as a buyer in 2019.
 
 Return the result table in any order. */
-select buyer_id,join_date, count(
-  case when date_trunc('year', order_date) = date '2019-01-01' then 1 else 0 end
-) as orders_in_2019
-from orders
-inner join users
-on users.user_id=orders.buyer_id
-group by buyer_id,join_date
-order by buyer_id;
+
+with cte as (
+    select *
+    from orders
+    where order_date between '2019-01-01' and '2019-12-31'
+) select u.user_id as buyer_id,u.join_date,count(cte.buyer_id) as orders_in_2019
+from users u
+left join cte 
+on cte.buyer_id=u.user_id
+group by u.user_id,join_date
